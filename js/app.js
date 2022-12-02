@@ -1,29 +1,25 @@
 import blogPost from "./blogPostData.js"
 import Posts from "./Post.js"
 
+const INCREMENT_OF_ADDED_POSTS = 3
+const postsContainer = document.getElementById('posts-container')
+const btnContainer = document.getElementById('btn-container')
+const heroContainer = document.getElementById('hero')
+
 let allPosts = ''
 
 let numOfCurrentPosts = 6
 let isAllPostsVisible = false
 
-const postButton = document.querySelectorAll('[data-id]')
-
-postButton.forEach(post => {
-    post.addEventListener('click', openPost)
-})
-
-document.getElementById('hero').innerHTML = getBlogPostByIndex(0).getHeroPostHtml()
-
-const postsContainer = document.getElementById('posts-container')
-const btnContainer = document.getElementById('btn-container')
-
+heroContainer.innerHTML = getBlogPostByIndex(0).getHeroPostHtml()
 postsContainer.innerHTML = getRecentPostsHtml(6)
 
 addEventListenerToPosts()
 
+//general event listener
 document.body.addEventListener('click', (event)=>{
     if(event.target.id === 'view-more'){
-        document.getElementById('posts-container').innerHTML = getMorePosts()
+        postsContainer.innerHTML = getMorePosts()
         addEventListenerToPosts()
         if(isAllPostsVisible){
             btnContainer.innerHTML = `<button id="view-less" class="view-btn bold">View Less</button>`
@@ -38,13 +34,13 @@ document.body.addEventListener('click', (event)=>{
         addEventListenerToPosts()
     }
     else if(event.target.id === 'about-nav'){
-        document.getElementById('hero').innerHTML = getAboutPageHtml()
+        heroContainer.innerHTML = getAboutPageHtml()
         postsContainer.innerHTML = getRecentPostsHtml(3)
         numOfCurrentPosts = 3
         addEventListenerToPosts()
     }
 })
-
+//adds an event listener to post cards
 function addEventListenerToPosts(){
     const postBtn = document.querySelectorAll('[data-post]')
     postBtn.forEach(post => {
@@ -52,16 +48,17 @@ function addEventListenerToPosts(){
     })
 }
 
+//Opens post if user clicks on the post card according to it's post-id attribute
 function postHandler(event){
     const postId = Number(event.currentTarget.getAttribute('data-post'))
     const currentPost = getBlogPostById(postId).getPostHtml()
-    document.getElementById('hero').innerHTML = currentPost
+    heroContainer.innerHTML = currentPost
     postsContainer.innerHTML = getRecentPostsHtml(3)
     addEventListenerToPosts()
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     numOfCurrentPosts = 3
 }
-
+//Generates the most recent. The argument value is how many need to be generated
 function getRecentPostsHtml(numOfRecentPosts){
     allPosts = ''
     let num = 0
@@ -71,9 +68,9 @@ function getRecentPostsHtml(numOfRecentPosts){
     })
     return allPosts
 }
-
+//Loops through blogPost and generates more posts for the user to see 
 function getMorePosts(){
-    numOfCurrentPosts += 3
+    numOfCurrentPosts += INCREMENT_OF_ADDED_POSTS
     let num = 0
     if(numOfCurrentPosts < blogPost.length){
         allPosts = ''

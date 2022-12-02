@@ -7,7 +7,7 @@ class Posts {
     getHeroPostHtml(){
         const {id, name, date, thumbnail, summary} = this
         return `
-        <div id="${id}" class="hero" style=" background-image: url(${thumbnail})">
+        <div class="hero" data-post="${id}" style=" background-image: url(${thumbnail})">
             <div class="hero-text flow">
                 <p class="date">${date}</p>
                 <h1 class="blog-title">${name}</h1>
